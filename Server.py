@@ -87,6 +87,6 @@ class HttpServer:
 
 if __name__ == '__main__':
     server = HttpServer()
-    host = 'localhost'
+    host = '0.0.0.0'
     port = 8080
     run(server.app, host=host, port=port)
