@@ -36,7 +36,7 @@ class Parent(Model):
         if not Node.is_contain_id(children_id):
             raise DataError('Id not exist in database')
 
-        parent = Parent.select().where(Parent.children_id.get_id() == children_id).get()
+        parent = Parent.select().where(Parent.children_id == children_id).get()
         return parent.parent_id.get_id()
 
     @staticmethod
@@ -44,7 +44,7 @@ class Parent(Model):
         if not Node.is_contain_id(parent_id):
             raise DataError('Id not exist in database')
         result = []
-        for e in Parent.select().where(Parent.parent_id.get_id() == parent_id):
+        for e in Parent.select().where(Parent.parent_id == parent_id):
             result.append(e.get_id())
         return result
 
@@ -113,14 +113,14 @@ class Tree:
 
     def delete(self, node_id, delete_prev_edges=True):
         edges_id = []
-        for edge in Parent.select().where(Parent.parent_id.get_id() == node_id):
+        for edge in Parent.select().where(Parent.parent_id == node_id):
             children_id = edge.children_id.get_id()
             self.delete(children_id, False)
             edges_id.append(edge.get_id())
 
         Node.delete_by_id(node_id)
         if delete_prev_edges:
-            for edge in Parent.select().where(Parent.children_id.get_id() == node_id):
+            for edge in Parent.select().where(Parent.children_id == node_id):
                 edges_id.append(edge.get_id())
         for edge_id in edges_id:
             Parent.delete_by_id(edge_id)
